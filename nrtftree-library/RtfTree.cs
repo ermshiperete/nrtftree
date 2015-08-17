@@ -23,7 +23,7 @@
  * Home Page:	http://www.sgoliver.net
  * GitHub:	    https://github.com/sgolivernet/nrtftree
  * Class:		RtfTree
- * Description:	Representa un documento RTF en forma de árbol.
+ * Description:	Representa un documento RTF en forma de Ã¡rbol.
  * ******************************************************************************/
 
 using System;
@@ -37,14 +37,14 @@ namespace Net.Sgoliver.NRtfTree
     namespace Core
     {
         /// <summary>
-        /// Reresenta la estructura en forma de árbol de un documento RTF.
+        /// Reresenta la estructura en forma de Ã¡rbol de un documento RTF.
         /// </summary>
         public class RtfTree
         {
-			#region Atributos privados
+            #region Atributos privados
 
             /// <summary>
-            /// Nodo raíz del documento RTF.
+            /// Nodo raÃ­z del documento RTF.
             /// </summary>
             private RtfTreeNode rootNode;
             /// <summary>
@@ -52,7 +52,7 @@ namespace Net.Sgoliver.NRtfTree
             /// </summary>
             private TextReader rtf;
             /// <summary>
-            /// Analizador léxico para RTF
+            /// Analizador lÃ©xico para RTF
             /// </summary>
             private RtfLex lex;
             /// <summary>
@@ -64,7 +64,7 @@ namespace Net.Sgoliver.NRtfTree
             /// </summary>
             private int level;
             /// <summary>
-            /// Indica si se decodifican los caracteres especiales (\') uniéndolos a nodos de texto contiguos.
+            /// Indica si se decodifican los caracteres especiales (\') uniÃ©ndolos a nodos de texto contiguos.
             /// </summary>
             private bool mergeSpecialCharacters;
 
@@ -77,12 +77,12 @@ namespace Net.Sgoliver.NRtfTree
             /// </summary>
             public RtfTree()
             {
-                //Se crea el nodo raíz del documento
-                rootNode = new RtfTreeNode(RtfNodeType.Root,"ROOT",false,0);
+                //Se crea el nodo raÃ­z del documento
+                rootNode = new RtfTreeNode(RtfNodeType.Root, "ROOT", false, 0);
 
                 rootNode.Tree = this;
 
-				/* Inicializados por defecto */
+                /* Inicializados por defecto */
 
                 //Se inicializa la propiedad mergeSpecialCharacters
                 mergeSpecialCharacters = false;
@@ -93,12 +93,12 @@ namespace Net.Sgoliver.NRtfTree
 
             #endregion
 
-            #region Métodos Públicos
+            #region MÃ©todos PÃºblicos
 
             /// <summary>
-            /// Realiza una copia exacta del árbol RTF.
+            /// Realiza una copia exacta del Ã¡rbol RTF.
             /// </summary>
-            /// <returns>Devuelve una copia exacta del árbol RTF.</returns>
+            /// <returns>Devuelve una copia exacta del Ã¡rbol RTF.</returns>
             public RtfTree CloneTree()
             {
                 RtfTree clon = new RtfTree();
@@ -112,8 +112,13 @@ namespace Net.Sgoliver.NRtfTree
             /// Carga un fichero en formato RTF.
             /// </summary>
             /// <param name="path">Ruta del fichero con el documento.</param>
-            /// <returns>Se devuelve el valor 0 en caso de no producirse ningún error en la carga del documento.
+            /// <returns>Se devuelve el valor 0 en caso de no producirse ningÃºn error en la carga del documento.
             /// En caso contrario se devuelve el valor -1.</returns>
+            /// <exception cref="System.ArgumentException"> Thrown when path is an empty string (""). </exception>
+            /// <exception cref="System.ArgumentNullException"> Thrown when path or encoding is null. </exception>
+            /// <exception cref="FileNotFoundException"> Thrown when file cannot be found. </exception>
+            /// <exception cref="DirectoryNotFoundException"> Thrown when specified path is invalid, such as being on an unmapped drive. </exception>
+            /// <exception cref="System.NotSupportedException"> Thrown when path includes an incorrect or invalid syntax for file name, directory name, or volume label. </exception>
             public int LoadRtfFile(string path)
             {
                 return LoadRtfFile(path, Encoding.Default);
@@ -124,34 +129,43 @@ namespace Net.Sgoliver.NRtfTree
             /// </summary>
             /// <param name="path">Ruta del fichero con el documento.</param>
             /// <param name="encoding"></param>
-            /// <returns>Se devuelve el valor 0 en caso de no producirse ningún error en la carga del documento.
-            /// En caso contrario se devuelve el valor -1.</returns>
+            /// <returns>
+            /// Se devuelve el valor 0 en caso de no producirse ningÃºn error en la carga del documento.
+            /// En caso contrario se devuelve el valor -1.
+            /// </returns>
+            /// <exception cref="System.ArgumentException"> Thrown when path is an empty string (""). </exception>
+            /// <exception cref="System.ArgumentNullException"> Thrown when path or encoding is null. </exception>
+            /// <exception cref="FileNotFoundException"> Thrown when file cannot be found. </exception>
+            /// <exception cref="DirectoryNotFoundException"> Thrown when specified path is invalid, such as being on an unmapped drive. </exception>
+            /// <exception cref="System.NotSupportedException"> Thrown when path includes an incorrect or invalid syntax for file name, directory name, or volume label. </exception>
             public int LoadRtfFile(string path, Encoding encoding)
             {
-                //Resultado de la carga
-                int res = 0;
+                using (StreamReader rtfStream = new StreamReader(path, encoding))
+                {
+                    //Se abre el fichero de entrada
+                    return LoadRtfStream(rtfStream);
+                }
+            }
 
-                //Se abre el fichero de entrada
-                rtf = new StreamReader(path, encoding);
+            /// <summary> Load RTF document from StreamReader. </summary>
+            /// <param name="streamReader">Stream reader of the document</param>
+            /// <returns> 0 is returned if no error occurs in loading the document. Otherwise -1 is returned. </returns>
+            /// <exception cref="System.ArgumentException"> Thrown when stream does not support reading. </exception>
+            /// <exception cref="System.ArgumentNullException"> Thrown when path is null. </exception>
+            public int LoadRtfStream(StreamReader streamReader)
+            {
+                //Se crea el analizador lÃ©xico para RTF
+                lex = new RtfLex(streamReader);
 
-                //Se crea el analizador léxico para RTF
-                lex = new RtfLex(rtf);
-
-                //Se carga el árbol con el contenido del documento RTF
-                res = parseRtfTree();
-
-                //Se cierra el stream
-                rtf.Close();
-
-                //Se devuelve el resultado de la carga
-                return res;
+                //Se carga el Ã¡rbol con el contenido del documento RTF
+                return parseRtfTree();
             }
 
             /// <summary>
             /// Carga una cadena de Texto con formato RTF.
             /// </summary>
             /// <param name="text">Cadena de Texto que contiene el documento.</param>
-            /// <returns>Se devuelve el valor 0 en caso de no producirse ningún error en la carga del documento.
+            /// <returns>Se devuelve el valor 0 en caso de no producirse ningÃºn error en la carga del documento.
             /// En caso contrario se devuelve el valor -1.</returns>
             public int LoadRtfText(string text)
             {
@@ -161,10 +175,10 @@ namespace Net.Sgoliver.NRtfTree
                 //Se abre el fichero de entrada
                 rtf = new StringReader(text);
 
-                //Se crea el analizador léxico para RTF
+                //Se crea el analizador lÃ©xico para RTF
                 lex = new RtfLex(rtf);
 
-                //Se carga el árbol con el contenido del documento RTF
+                //Se carga el Ã¡rbol con el contenido del documento RTF
                 res = parseRtfTree();
 
                 //Se cierra el stream
@@ -175,15 +189,15 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Escribe el código RTF del documento a un fichero.
+            /// Escribe el cÃ³digo RTF del documento a un fichero.
             /// </summary>
             /// <param name="filePath">Ruta del fichero a generar con el documento RTF.</param>
             public void SaveRtf(string filePath)
-            { 
+            {
                 //Stream de salida
                 StreamWriter sw = new StreamWriter(filePath);
 
-                //Se trasforma el árbol RTF a Texto y se escribe al fichero
+                //Se trasforma el Ã¡rbol RTF a Texto y se escribe al fichero
                 sw.Write(RootNode.Rtf);
 
                 //Se cierra el fichero
@@ -192,9 +206,9 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Devuelve una representación Textual del documento cargado.
+            /// Devuelve una representaciÃ³n Textual del documento cargado.
             /// </summary>
-            /// <returns>Cadena de caracteres con la representación del documento.</returns>
+            /// <returns>Cadena de caracteres con la representaciÃ³n del documento.</returns>
             public override string ToString()
             {
                 string res = "";
@@ -205,9 +219,9 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Devuelve una representación Textual del documento cargado. Añade el tipo de nodo a la izquierda del contenido del nodo.
+            /// Devuelve una representaciÃ³n Textual del documento cargado. AÃ±ade el tipo de nodo a la izquierda del contenido del nodo.
             /// </summary>
-            /// <returns>Cadena de caracteres con la representación del documento.</returns>
+            /// <returns>Cadena de caracteres con la representaciÃ³n del documento.</returns>
             public string ToStringEx()
             {
                 string res = "";
@@ -225,13 +239,13 @@ namespace Net.Sgoliver.NRtfTree
             {
                 RtfFontTable tablaFuentes = new RtfFontTable();
 
-				//Nodo raiz del documento
-				RtfTreeNode root = rootNode;
+                //Nodo raiz del documento
+                RtfTreeNode root = rootNode;
 
-				//Grupo principal del documento
-				RtfTreeNode nprin = root.FirstChild;
+                //Grupo principal del documento
+                RtfTreeNode nprin = root.FirstChild;
 
-                //Buscamos la tabla de fuentes en el árbol
+                //Buscamos la tabla de fuentes en el Ã¡rbol
                 bool enc = false;
                 int i = 0;
                 RtfTreeNode ntf = new RtfTreeNode();  //Nodo con la tabla de fuentes
@@ -285,7 +299,7 @@ namespace Net.Sgoliver.NRtfTree
                 //Grupo principal del documento
                 RtfTreeNode nprin = root.FirstChild;
 
-                //Buscamos la tabla de colores en el árbol
+                //Buscamos la tabla de colores en el Ã¡rbol
                 bool enc = false;
                 int i = 0;
                 RtfTreeNode ntc = new RtfTreeNode();  //Nodo con la tabla de fuentes
@@ -307,7 +321,7 @@ namespace Net.Sgoliver.NRtfTree
                 int verde = 0;
                 int azul = 0;
 
-                //Añadimos el color por defecto, en este caso el negro.
+                //AÃ±adimos el color por defecto, en este caso el negro.
                 //tabla.Add(Color.FromArgb(rojo,verde,azul));
 
                 for (int j = 1; j < ntc.ChildNodes.Count; j++)
@@ -367,16 +381,16 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Devuelve la información contenida en el grupo "\info" del documento RTF.
+            /// Devuelve la informaciÃ³n contenida en el grupo "\info" del documento RTF.
             /// </summary>
-            /// <returns>Objeto InfoGroup con la información del grupo "\info" del documento RTF.</returns>
+            /// <returns>Objeto InfoGroup con la informaciÃ³n del grupo "\info" del documento RTF.</returns>
             public InfoGroup GetInfoGroup()
             {
                 InfoGroup info = null;
 
                 RtfTreeNode infoNode = RootNode.SelectSingleNode("info");
 
-                //Si existe el nodo "\info" exraemos toda la información.
+                //Si existe el nodo "\info" exraemos toda la informaciÃ³n.
                 if (infoNode != null)
                 {
                     RtfTreeNode auxnode = null;
@@ -462,7 +476,7 @@ namespace Net.Sgoliver.NRtfTree
                     //Revision DateTime
                     if ((auxnode = rootNode.SelectSingleNode("revtim")) != null)
                         info.RevisionTime = parseDateTime(auxnode.ParentNode);
-                    
+
                     //Last Print Time
                     if ((auxnode = rootNode.SelectSingleNode("printim")) != null)
                         info.LastPrintTime = parseDateTime(auxnode.ParentNode);
@@ -476,12 +490,12 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Devuelve la tabla de códigos con la que está codificado el documento RTF.
+            /// Devuelve la tabla de cÃ³digos con la que estÃ¡ codificado el documento RTF.
             /// </summary>
-            /// <returns>Tabla de códigos del documento RTF. Si no está especificada en el documento se devuelve la tabla de códigos actual del sistema.</returns>
+            /// <returns>Tabla de cÃ³digos del documento RTF. Si no estÃ¡ especificada en el documento se devuelve la tabla de cÃ³digos actual del sistema.</returns>
             public Encoding GetEncoding()
             {
-                //Contributed by Jan Stuchlík
+                //Contributed by Jan StuchlÃ­k
 
                 Encoding encoding = Encoding.Default;
 
@@ -497,25 +511,25 @@ namespace Net.Sgoliver.NRtfTree
 
             #endregion
 
-            #region Métodos Privados
+            #region MÃ©todos Privados
 
             /// <summary>
-            /// Analiza el documento y lo carga con estructura de árbol.
+            /// Analiza el documento y lo carga con estructura de Ã¡rbol.
             /// </summary>
-            /// <returns>Se devuelve el valor 0 en caso de no producirse ningún error en la carga del documento.
+            /// <returns>Se devuelve el valor 0 en caso de no producirse ningÃºn error en la carga del documento.
             /// En caso contrario se devuelve el valor -1.</returns>
             private int parseRtfTree()
             {
                 //Resultado de la carga del documento
                 int res = 0;
 
-                //Codificación por defecto del documento
+                //CodificaciÃ³n por defecto del documento
                 Encoding encoding = Encoding.Default;
 
                 //Nodo actual
                 RtfTreeNode curNode = rootNode;
 
-                //Nuevos nodos para construir el árbol RTF
+                //Nuevos nodos para construir el Ã¡rbol RTF
                 RtfTreeNode newNode = null;
 
                 //Se obtiene el primer token
@@ -526,7 +540,7 @@ namespace Net.Sgoliver.NRtfTree
                     switch (tok.Type)
                     {
                         case RtfTokenType.GroupStart:
-                            newNode = new RtfTreeNode(RtfNodeType.Group,"GROUP",false,0);
+                            newNode = new RtfTreeNode(RtfNodeType.Group, "GROUP", false, 0);
                             curNode.AppendChild(newNode);
                             curNode = newNode;
                             level++;
@@ -540,7 +554,7 @@ namespace Net.Sgoliver.NRtfTree
                         case RtfTokenType.Text:
                             if (mergeSpecialCharacters)
                             {
-                                //Contributed by Jan Stuchlík
+                                //Contributed by Jan StuchlÃ­k
                                 bool isText = tok.Type == RtfTokenType.Text || (tok.Type == RtfTokenType.Control && tok.Key == "'");
                                 if (curNode.LastChild != null && (curNode.LastChild.NodeType == RtfNodeType.Text && isText))
                                 {
@@ -572,7 +586,7 @@ namespace Net.Sgoliver.NRtfTree
 
                             if (mergeSpecialCharacters)
                             {
-                                //Contributed by Jan Stuchlík
+                                //Contributed by Jan StuchlÃ­k
                                 if (level == 1 && newNode.NodeType == RtfNodeType.Keyword && newNode.NodeKey == "ansicpg")
                                 {
                                     encoding = Encoding.GetEncoding(newNode.Parameter);
@@ -589,7 +603,7 @@ namespace Net.Sgoliver.NRtfTree
                     tok = lex.NextToken();
                 }
 
-                //Si el nivel actual no es 0 ( == Algun grupo no está bien formado )
+                //Si el nivel actual no es 0 ( == Algun grupo no estÃ¡ bien formado )
                 if (level != 0)
                 {
                     res = -1;
@@ -600,24 +614,24 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Decodifica un caracter especial indicado por su código decimal
+            /// Decodifica un caracter especial indicado por su cÃ³digo decimal
             /// </summary>
-            /// <param name="code">Código del caracter especial (\')</param>
-            /// <param name="enc">Codificación utilizada para decodificar el caracter especial.</param>
+            /// <param name="code">CÃ³digo del caracter especial (\')</param>
+            /// <param name="enc">CodificaciÃ³n utilizada para decodificar el caracter especial.</param>
             /// <returns>Caracter especial decodificado.</returns>
             private string DecodeControlChar(int code, Encoding enc)
             {
-                //Contributed by Jan Stuchlík
-                return enc.GetString(new byte[] {(byte)code});                
+                //Contributed by Jan StuchlÃ­k
+                return enc.GetString(new byte[] { (byte)code });
             }
 
             /// <summary>
-            /// Método auxiliar para generar la representación Textual del documento RTF.
+            /// MÃ©todo auxiliar para generar la representaciÃ³n Textual del documento RTF.
             /// </summary>
-            /// <param name="curNode">Nodo actual del árbol.</param>
-            /// <param name="level">Nivel actual en árbol.</param>
-            /// <param name="showNodeTypes">Indica si se mostrará el tipo de cada nodo del árbol.</param>
-            /// <returns>Representación Textual del nodo 'curNode' con nivel 'level'</returns>
+            /// <param name="curNode">Nodo actual del Ã¡rbol.</param>
+            /// <param name="level">Nivel actual en Ã¡rbol.</param>
+            /// <param name="showNodeTypes">Indica si se mostrarÃ¡ el tipo de cada nodo del Ã¡rbol.</param>
+            /// <returns>RepresentaciÃ³n Textual del nodo 'curNode' con nivel 'level'</returns>
             private string toStringInm(RtfTreeNode curNode, int level, bool showNodeTypes)
             {
                 StringBuilder res = new StringBuilder();
@@ -661,11 +675,11 @@ namespace Net.Sgoliver.NRtfTree
                 return res.ToString();
             }
 
-			/// <summary>
-			/// Parsea una fecha con formato "\yr2005\mo12\dy2\hr22\min56\sec15"
-			/// </summary>
-			/// <param name="group">Grupo RTF con la fecha.</param>
-			/// <returns>Objeto DateTime con la fecha leida.</returns>
+            /// <summary>
+            /// Parsea una fecha con formato "\yr2005\mo12\dy2\hr22\min56\sec15"
+            /// </summary>
+            /// <param name="group">Grupo RTF con la fecha.</param>
+            /// <returns>Objeto DateTime con la fecha leida.</returns>
             private static DateTime parseDateTime(RtfTreeNode group)
             {
                 DateTime dt;
@@ -703,7 +717,7 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Extrae el texto de un árbol RTF.
+            /// Extrae el texto de un Ã¡rbol RTF.
             /// </summary>
             /// <returns>Texto plano del documento.</returns>
             private string ConvertToText()
@@ -812,11 +826,11 @@ namespace Net.Sgoliver.NRtfTree
                     }
                     else if (node.NodeType == RtfNodeType.Text)
                     {
-                        rss.Name = node.NodeKey.Substring(0,node.NodeKey.Length-1);
+                        rss.Name = node.NodeKey.Substring(0, node.NodeKey.Length - 1);
                     }
                     else
                     {
-                        if(node.NodeKey != "*")
+                        if (node.NodeKey != "*")
                             rss.Formatting.Add(node);
                     }
                 }
@@ -829,13 +843,13 @@ namespace Net.Sgoliver.NRtfTree
             #region Propiedades
 
             /// <summary>
-            /// Devuelve el nodo raíz del árbol del documento.
+            /// Devuelve el nodo raÃ­z del Ã¡rbol del documento.
             /// </summary>
             public RtfTreeNode RootNode
             {
                 get
                 {
-                    //Se devuelve el nodo raíz del documento
+                    //Se devuelve el nodo raÃ­z del documento
                     return rootNode;
                 }
             }
@@ -846,7 +860,7 @@ namespace Net.Sgoliver.NRtfTree
             public RtfTreeNode MainGroup
             {
                 get
-                { 
+                {
                     //Se devuelve el grupo principal (null en caso de no existir)
                     if (rootNode.HasChildNodes())
                         return rootNode.ChildNodes[0];
@@ -868,7 +882,7 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Indica si se decodifican los caracteres especiales (\') uniéndolos a nodos de texto contiguos.
+            /// Indica si se decodifican los caracteres especiales (\') uniÃ©ndolos a nodos de texto contiguos.
             /// </summary>
             public bool MergeSpecialCharacters
             {
