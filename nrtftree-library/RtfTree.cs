@@ -239,28 +239,8 @@ namespace Net.Sgoliver.NRtfTree
             {
                 RtfFontTable tablaFuentes = new RtfFontTable();
 
-                //Nodo raiz del documento
-                RtfTreeNode root = rootNode;
-
-                //Grupo principal del documento
-                RtfTreeNode nprin = root.FirstChild;
-
                 //Buscamos la tabla de fuentes en el árbol
-                bool enc = false;
-                int i = 0;
-                RtfTreeNode ntf = new RtfTreeNode();  //Nodo con la tabla de fuentes
-
-                while (!enc && i < nprin.ChildNodes.Count)
-                {
-                    if (nprin.ChildNodes[i].NodeType == RtfNodeType.Group &&
-                        nprin.ChildNodes[i].FirstChild.NodeKey == "fonttbl")
-                    {
-                        enc = true;
-                        ntf = nprin.ChildNodes[i];
-                    }
-
-                    i++;
-                }
+                RtfTreeNode ntf = MainGroup.SelectSingleGroup("fonttbl"); //Nodo con la tabla de fuentes
 
                 //Rellenamos el array de fuentes
                 for (int j = 1; j < ntf.ChildNodes.Count; j++)
@@ -286,6 +266,35 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
+            /// Obtiene el código del color pasado como parámetro, insertándolo en la tabla de colores si es necesario.
+            /// </summary>
+            /// <param name="colorDestTbl">Tabla de colores resultante.</param>
+            /// <param name="iColorName">Color buscado.</param>
+            /// <returns>
+            /// Table index of requested color. 
+            /// Note: If color wasn't present in the table, this method will add it!!!
+            /// </returns>
+            public int GetColorID(RtfColorTable colorDestTbl, Color iColorName)
+            {
+                int iExistingColorID;
+
+                if ((iExistingColorID = colorDestTbl.IndexOf(iColorName)) == -1)
+                {
+                    iExistingColorID = colorDestTbl.Count;
+                    colorDestTbl.AddColor(iColorName);
+
+                    RtfTreeNode colorTableGroupNode = MainGroup.SelectSingleGroup("colortbl");
+
+                    colorTableGroupNode.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "red", true, iColorName.R));
+                    colorTableGroupNode.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "green", true, iColorName.G));
+                    colorTableGroupNode.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "blue", true, iColorName.B));
+                    colorTableGroupNode.AppendChild(new RtfTreeNode(RtfNodeType.Text, ";", false, 0));
+                }
+
+                return iExistingColorID;
+            }
+
+            /// <summary>
             /// Devuelve la tabla de colores del documento RTF.
             /// </summary>
             /// <returns>Tabla de colores del documento RTF</returns>
@@ -293,28 +302,8 @@ namespace Net.Sgoliver.NRtfTree
             {
                 RtfColorTable tablaColores = new RtfColorTable();
 
-                //Nodo raiz del documento
-                RtfTreeNode root = rootNode;
-
-                //Grupo principal del documento
-                RtfTreeNode nprin = root.FirstChild;
-
                 //Buscamos la tabla de colores en el árbol
-                bool enc = false;
-                int i = 0;
-                RtfTreeNode ntc = new RtfTreeNode();  //Nodo con la tabla de fuentes
-
-                while (!enc && i < nprin.ChildNodes.Count)
-                {
-                    if (nprin.ChildNodes[i].NodeType == RtfNodeType.Group &&
-                        nprin.ChildNodes[i].FirstChild.NodeKey == "colortbl")
-                    {
-                        enc = true;
-                        ntc = nprin.ChildNodes[i];
-                    }
-
-                    i++;
-                }
+                RtfTreeNode ntc = MainGroup.SelectSingleGroup("colortbl"); //Nodo con la tabla de fuentes
 
                 //Rellenamos el array de colores
                 int rojo = 0;
