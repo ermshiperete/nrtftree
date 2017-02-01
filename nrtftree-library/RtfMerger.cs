@@ -61,7 +61,7 @@ namespace Net.Sgoliver.NRtfTree
                 baseRtfDoc = new RtfTree();
                 baseRtfDoc.LoadRtfFile(templatePath);
 
-                //Se crea la lista de par·metros de sustituciÛn (placeholders)
+                //Se crea la lista de par√°metros de sustituci√≥n (placeholders)
                 placeHolder = new Dictionary<string, RtfTree>();
             }
 
@@ -74,7 +74,7 @@ namespace Net.Sgoliver.NRtfTree
                 //Se carga el documento origen
                 baseRtfDoc = templateTree;
 
-                //Se crea la lista de par·metros de sustituciÛn (placeholders)
+                //Se crea la lista de par√°metros de sustituci√≥n (placeholders)
                 placeHolder = new Dictionary<string, RtfTree>();
             }
 
@@ -83,16 +83,16 @@ namespace Net.Sgoliver.NRtfTree
             /// </summary>
             public RtfMerger()
             {
-                //Se crea la lista de par·metros de sustituciÛn (placeholders)
+                //Se crea la lista de par√°metros de sustituci√≥n (placeholders)
                 placeHolder = new Dictionary<string, RtfTree>();
             }
 
             #endregion
 
-            #region MÈtodos P˙blicos
+            #region M√©todos P√∫blicos
 
             /// <summary>
-            /// Asocia un nuevo par·metro de sustituciÛn (placeholder) con la ruta del documento a insertar.
+            /// Asocia un nuevo par√°metro de sustituci√≥n (placeholder) con la ruta del documento a insertar.
             /// </summary>
             /// <param name="ph">Nombre del placeholder.</param>
             /// <param name="path">Ruta del documento a insertar.</param>
@@ -109,17 +109,17 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Asocia un nuevo par·metro de sustituciÛn (placeholder) con la ruta del documento a insertar.
+            /// Asocia un nuevo par√°metro de sustituci√≥n (placeholder) con la ruta del documento a insertar.
             /// </summary>
             /// <param name="ph">Nombre del placeholder.</param>
-            /// <param name="docTree">¡rbol RTF del documento a insertar.</param>
+            /// <param name="docTree">√Årbol RTF del documento a insertar.</param>
             public void AddPlaceHolder(string ph, RtfTree docTree)
             {
                 placeHolder.Add(ph, docTree);
             }
 
             /// <summary>
-            /// Desasocia un par·metro de sustituciÛn (placeholder) con la ruta del documento a insertar.
+            /// Desasocia un par√°metro de sustituci√≥n (placeholder) con la ruta del documento a insertar.
             /// </summary>
             /// <param name="ph">Nombre del placeholder.</param>
             public void RemovePlaceHolder(string ph)
@@ -128,22 +128,22 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Realiza la combinaciÛn de los documentos RTF.
-            /// <param name="removeLastPar">Indica si se debe eliminar el ˙ltimo nodo \par de los documentos insertados en la plantilla.</param>
-            /// <returns>Devuelve el ·rbol RTF resultado de la fusiÛn.</returns>
+            /// Realiza la combinaci√≥n de los documentos RTF.
+            /// <param name="removeLastPar">Indica si se debe eliminar el √∫ltimo nodo \par de los documentos insertados en la plantilla.</param>
+            /// <returns>Devuelve el √°rbol RTF resultado de la fusi√≥n.</returns>
             /// </summary>
             public RtfTree Merge(bool removeLastPar)
             {
-                //Indicativo de eliminaciÛn del ˙ltimo nodo \par para documentos insertados
+                //Indicativo de eliminaci√≥n del √∫ltimo nodo \par para documentos insertados
                 this.removeLastPar = removeLastPar;
 
-                //Se obtiene el grupo principal del ·rbol
+                //Se obtiene el grupo principal del √°rbol
                 RtfTreeNode parentNode = baseRtfDoc.MainGroup;
 
                 //Si el documento tiene grupo principal
                 if (parentNode != null)
                 {
-                    //Se analiza el texto del documento en busca de par·metros de reemplazo y se combinan los documentos
+                    //Se analiza el texto del documento en busca de par√°metros de reemplazo y se combinan los documentos
                     analizeTextContent(parentNode);
                 }
 
@@ -151,8 +151,8 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Realiza la combinaciÛn de los documentos RTF.
-            /// <returns>Devuelve el ·rbol RTF resultado de la fusiÛn.</returns>
+            /// Realiza la combinaci√≥n de los documentos RTF.
+            /// <returns>Devuelve el √°rbol RTF resultado de la fusi√≥n.</returns>
             /// </summary>
             public RtfTree Merge()
             {
@@ -164,7 +164,7 @@ namespace Net.Sgoliver.NRtfTree
             #region Propiedades
 
             /// <summary>
-            /// Devuelve la lista de par·metros de sustituciÛn con el formato: [string, RtfTree]
+            /// Devuelve la lista de par√°metros de sustituci√≥n con el formato: [string, RtfTree]
             /// </summary>
             public Dictionary<string, RtfTree> Placeholders
             {
@@ -175,7 +175,7 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Obtiene o establece el ·rbol RTF del documento plantilla.
+            /// Obtiene o establece el √°rbol RTF del documento plantilla.
             /// </summary>
             public RtfTree Template
             {
@@ -191,12 +191,12 @@ namespace Net.Sgoliver.NRtfTree
 
             #endregion
 
-            #region MÈtodos Privados
+            #region M√©todos Privados
 
             /// <summary>
-            /// Analiza el texto del documento en busca de par·metros de reemplazo y combina los documentos.
+            /// Analiza el texto del documento en busca de par√°metros de reemplazo y combina los documentos.
             /// </summary>
-            /// <param name="parentNode">Nodo del ·rbol a procesar.</param>
+            /// <param name="parentNode">Nodo del √°rbol a procesar.</param>
             private void analizeTextContent(RtfTreeNode parentNode)
             {
                 RtfTree docToInsert = null;
@@ -225,13 +225,13 @@ namespace Net.Sgoliver.NRtfTree
                                 //Si se ha encontrado una etiqueta
                                 if (indPH != -1)
                                 {
-                                    //Se recupera el ·rbol a insertar en la etiqueta actual
+                                    //Se recupera el √°rbol a insertar en la etiqueta actual
                                     docToInsert = placeHolder[ph].CloneTree();
 
-                                    //Se inserta el nuevo ·rbol en el ·rbol base
+                                    //Se inserta el nuevo √°rbol en el √°rbol base
                                     mergeCore(parentNode, iNdIndex, docToInsert, ph, indPH);
 
-                                    //Como puede que el nodo actual haya cambiado decrementamos el Ìndice
+                                    //Como puede que el nodo actual haya cambiado decrementamos el √≠ndice
                                     //y salimos del bucle para analizarlo de nuevo
                                     iNdIndex--;
                                     break;
@@ -251,16 +251,16 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Inserta un nuevo ·rbol en el lugar de una etiqueta de texto del ·rbol base.
+            /// Inserta un nuevo √°rbol en el lugar de una etiqueta de texto del √°rbol base.
             /// </summary>
-            /// <param name="parentNode">Nodo de tipo grupo que se est· procesando.</param>
-            /// <param name="iNdIndex">Õndice (dentro del grupo padre) del nodo texto que se est· procesando.</param>
-            /// <param name="docToInsert">Nuevo ·rbol RTF a insertar.</param>
+            /// <param name="parentNode">Nodo de tipo grupo que se est√° procesando.</param>
+            /// <param name="iNdIndex">√çndice (dentro del grupo padre) del nodo texto que se est√° procesando.</param>
+            /// <param name="docToInsert">Nuevo √°rbol RTF a insertar.</param>
             /// <param name="strCompletePlaceholder">Texto del la etiqueta que se va a reemplazar.</param>
-            /// <param name="intPlaceHolderNodePos">PosiciÛn de la etiqueta que se va a reemplazar dentro del nodo texto que se est· procesando.</param>
+            /// <param name="intPlaceHolderNodePos">Posici√≥n de la etiqueta que se va a reemplazar dentro del nodo texto que se est√° procesando.</param>
             private void mergeCore(RtfTreeNode parentNode, int iNdIndex, RtfTree docToInsert, string strCompletePlaceholder, int intPlaceHolderNodePos)
             {
-                //Si el documento a insertar no est· vacÌo
+                //Si el documento a insertar no est√° vac√≠o
                 if (docToInsert.RootNode.HasChildNodes())
                 {
                     int currentIndex = iNdIndex + 1;
@@ -271,17 +271,17 @@ namespace Net.Sgoliver.NRtfTree
                     //Se combinan las tablas de fuentes y se ajustan las fuentes del documento a insertar
                     mainAdjustFont(docToInsert);
 
-                    //Se elimina la informaciÛn de cabecera del documento a insertar (colores, fuentes, info, ...)
+                    //Se elimina la informaci√≥n de cabecera del documento a insertar (colores, fuentes, info, ...)
                     cleanToInsertDoc(docToInsert);
 
                     //Si el documento a insertar tiene contenido
                     if (docToInsert.RootNode.FirstChild.HasChildNodes())
                     {
-                        //Se inserta el documento nuevo en el ·rbol base
+                        //Se inserta el documento nuevo en el √°rbol base
                         execMergeDoc(parentNode, docToInsert, currentIndex);
                     }
 
-                    //Si la etiqueta no est· al final del nodo texto:
+                    //Si la etiqueta no est√° al final del nodo texto:
                     //Se inserta un nodo de texto con el resto del texto original (eliminando la etiqueta)
                     if (parentNode.ChildNodes[iNdIndex].NodeKey.Length != (intPlaceHolderNodePos + strCompletePlaceholder.Length))
                     {
@@ -309,57 +309,31 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Obtiene el cÛdigo de la fuente pasada como par·metro, insert·ndola en la tabla de fuentes si es necesario.
+            /// Obtiene el c√≥digo de la fuente pasada como par√°metro, insert√°ndola en la tabla de fuentes si es necesario.
             /// </summary>
             /// <param name="fontDestTbl">Tabla de fuentes resultante.</param>
             /// <param name="sFontName">Fuente buscada.</param>
             /// <returns></returns>
             private int getFontID(ref RtfFontTable fontDestTbl, string sFontName)
             {
-                int iExistingFontID = -1;
+                int iExistingFontID;
 
                 if ((iExistingFontID = fontDestTbl.IndexOf(sFontName)) == -1)
                 {
                     fontDestTbl.AddFont(sFontName);
                     iExistingFontID = fontDestTbl.IndexOf(sFontName);
 
-                    RtfNodeCollection nodeListToInsert = baseRtfDoc.RootNode.SelectNodes("fonttbl");
+                    RtfTreeNode fontTableGroupNode = baseRtfDoc.MainGroup.SelectSingleGroup("fonttbl");
 
                     RtfTreeNode ftFont = new RtfTreeNode(RtfNodeType.Group);
                     ftFont.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "f", true, iExistingFontID));
                     ftFont.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "fnil", false, 0));
                     ftFont.AppendChild(new RtfTreeNode(RtfNodeType.Text, sFontName + ";", false, 0));
-                    
-                    nodeListToInsert[0].ParentNode.AppendChild(ftFont);
+
+                    fontTableGroupNode.AppendChild(ftFont);
                 }
 
                 return iExistingFontID;
-            }
-
-            /// <summary>
-            /// Obtiene el cÛdigo del color pasado como par·metro, insert·ndolo en la tabla de colores si es necesario.
-            /// </summary>
-            /// <param name="colorDestTbl">Tabla de colores resultante.</param>
-            /// <param name="iColorName">Color buscado.</param>
-            /// <returns></returns>
-            private int getColorID(RtfColorTable colorDestTbl, Color iColorName)
-            {
-                int iExistingColorID;
-
-                if ((iExistingColorID = colorDestTbl.IndexOf(iColorName)) == -1)
-                {
-                    iExistingColorID = colorDestTbl.Count;
-                    colorDestTbl.AddColor(iColorName);
-
-                    RtfNodeCollection nodeListToInsert = baseRtfDoc.RootNode.SelectNodes("colortbl");
-
-                    nodeListToInsert[0].ParentNode.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "red", true, iColorName.R));
-                    nodeListToInsert[0].ParentNode.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "green", true, iColorName.G));
-                    nodeListToInsert[0].ParentNode.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "blue", true, iColorName.B));
-                    nodeListToInsert[0].ParentNode.AppendChild(new RtfTreeNode(RtfNodeType.Text, ";", false, 0));
-                }
-
-                return iExistingColorID;
             }
 
             /// <summary>
@@ -377,7 +351,7 @@ namespace Net.Sgoliver.NRtfTree
             /// <summary>
             /// Ajusta las fuentes del documento a insertar.
             /// </summary>
-            /// <param name="parentNode">Nodo grupo que se est· procesando.</param>
+            /// <param name="parentNode">Nodo grupo que se est√° procesando.</param>
             /// <param name="fontDestTbl">Tabla de fuentes resultante.</param>
             /// <param name="fontToCopyTbl">Tabla de fuentes del documento a insertar.</param>
             private void adjustFontRecursive(RtfTreeNode parentNode, RtfFontTable fontDestTbl, RtfFontTable fontToCopyTbl)
@@ -419,7 +393,7 @@ namespace Net.Sgoliver.NRtfTree
             /// <summary>
             /// Ajusta los colores del documento a insertar.
             /// </summary>
-            /// <param name="parentNode">Nodo grupo que se est· procesando.</param>
+            /// <param name="parentNode">Nodo grupo que se est√° procesando.</param>
             /// <param name="colorDestTbl">Tabla de colores resultante.</param>
             /// <param name="colorToCopyTbl">Tabla de colores del documento a insertar.</param>
             private void adjustColorRecursive(RtfTreeNode parentNode, RtfColorTable colorDestTbl, RtfColorTable colorToCopyTbl)
@@ -445,7 +419,7 @@ namespace Net.Sgoliver.NRtfTree
                              parentNode.ChildNodes[iNdIndex].NodeKey == "clcfpat") &&
                              parentNode.ChildNodes[iNdIndex].HasParameter)
                         {
-                            parentNode.ChildNodes[iNdIndex].Parameter = getColorID(colorDestTbl, colorToCopyTbl[parentNode.ChildNodes[iNdIndex].Parameter]);
+                            parentNode.ChildNodes[iNdIndex].Parameter = baseRtfDoc.GetColorID(colorDestTbl, colorToCopyTbl[parentNode.ChildNodes[iNdIndex].Parameter]);
                         }
 
                         adjustColorRecursive(parentNode.ChildNodes[iNdIndex], colorDestTbl, colorToCopyTbl);
@@ -454,23 +428,23 @@ namespace Net.Sgoliver.NRtfTree
             }
 
             /// <summary>
-            /// Inserta el nuevo ·rbol en el ·rbol base (como un nuevo grupo) eliminando toda la cabecera del documento insertado.
+            /// Inserta el nuevo √°rbol en el √°rbol base (como un nuevo grupo) eliminando toda la cabecera del documento insertado.
             /// </summary>
-            /// <param name="parentNode">Grupo base en el que se insertar· el nuevo arbol.</param>
-            /// <param name="treeToCopyParent">Nuevo ·rbol a insertar.</param>
-            /// <param name="intCurrIndex">Õndice en el que se insertar· el nuevo ·rbol dentro del grupo base.</param>
+            /// <param name="parentNode">Grupo base en el que se insertar√° el nuevo arbol.</param>
+            /// <param name="treeToCopyParent">Nuevo √°rbol a insertar.</param>
+            /// <param name="intCurrIndex">√çndice en el que se insertar√° el nuevo √°rbol dentro del grupo base.</param>
             private void execMergeDoc(RtfTreeNode parentNode, RtfTree treeToCopyParent, int intCurrIndex)
             {
                 //Se busca el primer "\pard" del documento (comienzo del texto)
                 RtfTreeNode nodePard = treeToCopyParent.RootNode.FirstChild.SelectSingleChildNode("pard");
 
-                //Se obtiene el Ìndice del nodo dentro del principal
+                //Se obtiene el √≠ndice del nodo dentro del principal
                 int indPard = treeToCopyParent.RootNode.FirstChild.ChildNodes.IndexOf(nodePard);
 
                 //Se crea el nuevo grupo
                 RtfTreeNode newGroup = new RtfTreeNode(RtfNodeType.Group);
 
-                //Se resetean las opciones de p·rrafo y fuente
+                //Se resetean las opciones de p√°rrafo y fuente
                 newGroup.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "pard", false, 0));
                 newGroup.AppendChild(new RtfTreeNode(RtfNodeType.Keyword, "plain", false, 0));
 
@@ -493,7 +467,7 @@ namespace Net.Sgoliver.NRtfTree
             /// <param name="docToInsert">Documento a insertar.</param>
             private void cleanToInsertDoc(RtfTree docToInsert)
             {
-                //Borra el ˙ltimo "\par" del documento si existe
+                //Borra el √∫ltimo "\par" del documento si existe
                 RtfTreeNode lastNode = docToInsert.RootNode.FirstChild.LastChild;
 
                 if (removeLastPar)
